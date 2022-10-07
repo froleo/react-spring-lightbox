@@ -161,7 +161,7 @@ const ImagePager = ({
                     setTimeout(() => setIsDragging(false), 100);
                 }
             },
-            onWheel: ({ velocity: [xVelocity, _yVelovity], direction: [xDirection, yDirection], ctrlKey }) => {
+            onWheel: ({ velocity: [xVelocity, _yVelocity], direction: [xDirection, yDirection], ctrlKey }) => {
                 // Disable drag if Image has been zoomed in to allow for panning
                 if (ctrlKey || disableDrag || xVelocity === 0) {
                     return;
