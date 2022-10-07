@@ -4,7 +4,7 @@ import {
     imageIsOutOfBounds,
     useDoubleClick,
 } from '../../utils';
-import { useGesture } from 'react-use-gesture';
+import { useGesture } from '@use-gesture/react';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import type { ImagesListItem } from '../../../../types/ImagesList';
@@ -226,7 +226,7 @@ const Image = ({
          * @see https://github.com/react-spring/react-use-gesture#usegesture-config
          */
         {
-            domTarget: imageRef as React.RefObject<EventTarget>,
+            target: imageRef as React.RefObject<EventTarget>,
             drag: {
                 filterTaps: true,
             },
@@ -318,7 +318,7 @@ Image.displayName = 'Image';
 
 export default Image;
 
-const AnimatedImage = styled(animated.img)<{ $inline: boolean }>`
+const AnimatedImage = styled(animated.img) <{ $inline: boolean }>`
     width: auto;
     height: auto;
     max-width: 100%;

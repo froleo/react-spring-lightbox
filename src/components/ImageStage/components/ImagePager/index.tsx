@@ -1,5 +1,5 @@
 import { animated, useSprings } from '@react-spring/web';
-import { useGesture } from 'react-use-gesture';
+import { useGesture } from '@use-gesture/react';
 import Image from '../Image';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -103,10 +103,10 @@ const ImagePager = ({
         {
             onDrag: ({
                 down,
-                movement: [xMovement],
-                direction: [xDir],
-                velocity,
-                distance,
+                movement: [xMovement, _yMovement],
+                direction: [xDirection, _yDirection],
+                velocity: [xVelocity, _yVelocity],
+                distance: [xDistance, _yDistance],
                 cancel,
                 active,
                 touches,
@@ -120,17 +120,17 @@ const ImagePager = ({
                     setIsDragging(true);
                 }
 
-                const isHorizontalDrag = Math.abs(xDir) > 0.7;
+                const isHorizontalDrag = Math.abs(xDirection) > 0.7;
                 const draggedFarEnough =
                     down &&
                     isHorizontalDrag &&
-                    distance > imageStageWidth / 3.5;
+                    xDistance > imageStageWidth / 3.5;
                 const draggedFastEnough =
-                    down && isHorizontalDrag && velocity > 2;
+                    down && isHorizontalDrag && xVelocity > 2;
 
                 // Handle next/prev image from valid drag
                 if ((draggedFarEnough || draggedFastEnough) && active) {
-                    const goToIndex = xDir > 0 ? -1 : 1;
+                    const goToIndex = xDirection > 0 ? -1 : 1;
 
                     // Cancel gesture event
                     cancel();
@@ -161,9 +161,9 @@ const ImagePager = ({
                     setTimeout(() => setIsDragging(false), 100);
                 }
             },
-            onWheel: ({ velocity, direction: [xDir, yDir], ctrlKey }) => {
+            onWheel: ({ velocity: [xVelocity, _yVelovity], direction: [xDirection, yDirection], ctrlKey }) => {
                 // Disable drag if Image has been zoomed in to allow for panning
-                if (ctrlKey || disableDrag || velocity === 0) {
+                if (ctrlKey || disableDrag || xVelocity === 0) {
                     return;
                 }
 
@@ -171,11 +171,11 @@ const ImagePager = ({
                     setIsDragging(true);
                 }
 
-                const draggedFastEnough = velocity > 1.1;
+                const draggedFastEnough = xVelocity > 1.1;
 
                 // Handle next/prev image from valid drag
                 if (draggedFastEnough) {
-                    const goToIndex = xDir + yDir > 0 ? -1 : 1;
+                    const goToIndex = xDirection + yDirection > 0 ? -1 : 1;
 
                     if (goToIndex > 0) {
                         onNext();
@@ -274,7 +274,7 @@ const PagerContentWrapper = styled.div`
     justify-content: center;
 `;
 
-const AnimatedImagePager = styled(animated.div)<{ $inline: boolean }>`
+const AnimatedImagePager = styled(animated.div) <{ $inline: boolean }>`
     position: absolute;
     top: 0px;
     left: 0px;
